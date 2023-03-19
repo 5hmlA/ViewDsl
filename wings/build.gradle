@@ -4,7 +4,7 @@ plugins {
 }
 
 
-rootProject.ext.GROUP_ID = "ospl.sparkj.ui"
+rootProject.ext.GROUP_ID = "osp.sparkj.ui"
 rootProject.ext.ARTIFACT_ID = "view-dsl"
 rootProject.ext.VERSION = "2023.03.19"
 
@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    api 'ospl.sparkj.ui:cartoon:2023.03.19'
+    api 'osp.sparkj.ui:cartoon:2023.03.19'
     api "androidx.compose.ui:ui:1.3.3"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
