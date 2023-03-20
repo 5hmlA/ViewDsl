@@ -8,7 +8,7 @@ rootProject.ext.GROUP_ID = "osp.sparkj.ui"
 rootProject.ext.ARTIFACT_ID = "view-dsl"
 rootProject.ext.VERSION = "2023.03.19"
 
-apply from: "https://raw.githubusercontent.com/5hmlA/animations/master/publish-plugin.gradle"
+apply from: "https://raw.githubusercontent.com/5hmlA/5hmlA/space/publish-plugin.gradle"
 
 android {
     namespace 'osp.sparkj.wings'
