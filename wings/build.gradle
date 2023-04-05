@@ -6,7 +6,7 @@ plugins {
 
 rootProject.ext.GROUP_ID = "osp.sparkj.ui"
 rootProject.ext.ARTIFACT_ID = "view-dsl"
-rootProject.ext.VERSION = "2023.03.19"
+rootProject.ext.VERSION = "2023.04.05"
 
 apply from: "https://raw.githubusercontent.com/5hmlA/5hmlA/space/publish-plugin.gradle"
 
@@ -40,8 +40,8 @@ android {
 }
 
 dependencies {
-    api 'osp.sparkj.ui:cartoon:2023.03.19'
-    api "androidx.compose.ui:ui:1.3.3"
+    api 'osp.sparkj.ui:cartoon:2023.03.27'
+    api "androidx.compose.ui:ui:1.4.0"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
