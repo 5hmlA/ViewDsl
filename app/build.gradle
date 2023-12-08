@@ -5,12 +5,11 @@ plugins {
 
 android {
     namespace 'osp.sparkj.viewdsl'
-    compileSdk 33
+    compileSdk libs.versions.android.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "osp.sparkj.viewdsl"
-        minSdk 24
-        targetSdk 33
+        minSdk libs.versions.android.minSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -34,14 +33,14 @@ android {
 }
 
 dependencies {
-
-    implementation "androidx.compose.ui:ui:1.4.0"
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation project(path: ':wings')
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation libs.sparkj.cartoon
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.google.material
+    testImplementation libs.test.junit
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.espresso.core
 }

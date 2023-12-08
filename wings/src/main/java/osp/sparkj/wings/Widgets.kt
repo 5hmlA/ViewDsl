@@ -34,12 +34,12 @@ import com.google.android.material.imageview.ShapeableImageView
 annotation class ViewDslScope
 
 context(ViewGroup)
-        operator fun View.unaryMinus() {
+operator fun View.unaryMinus() {
     this@ViewGroup.removeView(this)
 }
 
 context(ViewGroup)
-        operator fun View.unaryPlus(): LayoutParams {
+operator fun View.unaryPlus(): LayoutParams {
     if (this in this@ViewGroup) {
         return layoutParams
     }
@@ -60,9 +60,9 @@ fun ViewGroup.animateLayoutChange(transition: LayoutTransition = LayoutTransitio
 }
 
 inline fun <reified T : ViewGroup> T.row(
-    id: Int = NO_ID,
     width: Number = LayoutParams.MATCH_PARENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     crossinline content: @ViewDslScope LinearLayout.() -> Unit
 ): LinearLayout {
     return (findViewById(id) ?: LinearLayout(context)).apply(content).also {
@@ -79,9 +79,9 @@ inline fun <reified T : ViewGroup> T.row(
 }
 
 inline fun ViewGroup.column(
-    id: Int = NO_ID,
     width: Number = LayoutParams.MATCH_PARENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     crossinline content: @ViewDslScope LinearLayout.() -> Unit
 ): LinearLayout {
     return (findViewById(id) ?: LinearLayout(context)).apply(content).also {
@@ -98,9 +98,9 @@ inline fun ViewGroup.column(
 }
 
 inline fun <reified T : ViewGroup> T.linearlayout(
-    id: Int = NO_ID,
     width: Number = LayoutParams.WRAP_CONTENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     content: @ViewDslScope LinearLayout.() -> Unit
 ): LinearLayout {
     return (findViewById(id) ?: LinearLayout(context)).apply(content).also {
@@ -116,9 +116,9 @@ inline fun <reified T : ViewGroup> T.linearlayout(
 }
 
 inline fun ViewGroup.icon(
-    id: Int = NO_ID,
     width: Number = LayoutParams.WRAP_CONTENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     crossinline config: @ViewDslScope ShapeableImageView.() -> Unit
 ): ImageView {
     //setShapeAppearanceModel()
@@ -136,9 +136,9 @@ inline fun ViewGroup.icon(
 }
 
 inline fun ViewGroup.view(
-    id: Int = NO_ID,
     width: Number = LayoutParams.WRAP_CONTENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     supplyer: () -> View
 ): View {
     return (findViewById(id) ?: supplyer()).also {
@@ -170,7 +170,7 @@ inline fun View.linelayoutParams(
 }
 
 context(ConstraintLayout)
-        inline fun View.layoutParams(
+inline fun View.layoutParams(
     width: Number = LayoutParams.MATCH_PARENT,
     height: Number = LayoutParams.WRAP_CONTENT,
     all2parent: Boolean? = null,
@@ -202,9 +202,9 @@ fun lineLayoutParams(
 ) = LinearLayout.LayoutParams(width.toInt(), height.toInt(), weight)
 
 inline fun ViewGroup.text(
-    id: Int = NO_ID,
     width: Number = LayoutParams.WRAP_CONTENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     crossinline config: @ViewDslScope TextView.() -> Unit
 ): TextView {
     return (findViewById(id) ?: TextView(context)).apply(config).also {
@@ -220,9 +220,9 @@ inline fun ViewGroup.text(
 }
 
 inline fun ViewGroup.button(
-    id: Int = NO_ID,
     width: Number = LayoutParams.WRAP_CONTENT,
     height: Number = LayoutParams.WRAP_CONTENT,
+    id: Int = NO_ID,
     crossinline config: @ViewDslScope MaterialButton.() -> Unit
 ): Button {
     //setCornerRadius()
@@ -245,9 +245,9 @@ inline fun ViewGroup.button(
 }
 
 inline fun <reified T : ViewGroup> T.spacer(
-    id: Int = NO_ID,
     width: Number = -2,
     height: Number = -2,
+    id: Int = NO_ID,
     color: Int = Color.TRANSPARENT,
     layoutParams: LayoutParams? = null
 ): View {
@@ -348,9 +348,9 @@ inline fun <reified T : View> T.visibility(visible: Boolean): T {
 inline fun <reified T : View> T.isVisible(): Boolean = isVisible
 
 inline fun <reified T : ViewGroup> T.canvas(
-    id: Int = NO_ID,
     width: Number,
     height: Number,
+    id: Int = NO_ID,
     crossinline drawScope: @ViewDslScope CanvasView.() -> Unit
 ): CanvasView {
     return (findViewById(id) ?: CanvasView(context)).apply(drawScope).also {
@@ -363,10 +363,10 @@ inline fun <reified T : ViewGroup> T.canvas(
 }
 
 inline fun <reified T : ViewGroup> T.vLayoutConstraint(
-    id: Int = NO_ID,
     width: Number = LayoutParams.MATCH_PARENT,
     height: Number = LayoutParams.MATCH_PARENT,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    id: Int = NO_ID,
     viewScope: @ViewDslScope LayoutConstraint.() -> Unit
 ): ConstraintLayout {
     return (findViewById(id) ?: LayoutConstraint(context = context, modifier)).apply(viewScope).also {
@@ -616,7 +616,6 @@ fun <T : View> T.checkId(idset: Int = NO_ID): T {
  * 储物柜
  */
 interface Locker {
-
     fun <T : Any> retrieve(key: String = "key", value: (() -> T)? = null): T?
 
 }
@@ -701,7 +700,6 @@ fun Locker.findAnimator(key: String): ValueAnimator? {
 
 class MapLocker : Locker {
     private val lockerMap: MutableMap<String, Any> = mutableMapOf()
-
     override fun <T : Any> retrieve(key: String, value: (() -> T)?): T? {
         if (key.isEmpty()) {
             lockerMap.clear()
