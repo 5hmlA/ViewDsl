@@ -1,4 +1,4 @@
-package osp.sparkj.wings
+package osp.sparkj.dsl
 
 class JMutableMap<K, V> : LinkedHashMap<K, V> {
 

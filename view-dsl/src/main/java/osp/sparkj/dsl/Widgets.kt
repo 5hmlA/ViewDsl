@@ -1,4 +1,4 @@
-package osp.sparkj.wings
+package osp.sparkj.dsl
 
 import android.animation.LayoutTransition
 import android.animation.ValueAnimator
@@ -14,16 +14,25 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.*
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.NO_ID
+import android.view.ViewGroup.generateViewId
 import android.view.ViewOutlineProvider
-import android.widget.*
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Space
+import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.contains
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -712,6 +721,38 @@ class MapLocker : Locker {
         }
     }
 }
+
+fun View.topLayer(onAttach: FrameLayout.(AppCompatActivity) -> Unit) {
+    addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(v: View) {
+            //这里开始已经可以获取宽高了
+            (context as? AppCompatActivity)?.apply {
+                onAttach(window.decorView.findViewById(android.R.id.content), this)
+            }
+
+        }
+
+        override fun onViewDetachedFromWindow(v: View) {
+            removeOnAttachStateChangeListener(this)
+        }
+    })
+
+}
+
+fun View.topLayerTip(more: ((TextView) -> Unit)? = null): MutableLiveData<String> {
+    val source = MutableLiveData<String>()
+    topLayer {
+        text(width = -1, height = -1) {
+            textSize = 16f
+            source.observe(it) {
+                text = it
+            }
+            more?.invoke(this)
+        }
+    }
+    return source
+}
+
 
 fun ComponentActivity.setContent(
     modifier: Modifier = Modifier,

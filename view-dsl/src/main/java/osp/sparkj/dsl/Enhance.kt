@@ -1,4 +1,4 @@
-package osp.sparkj.wings
+package osp.sparkj.dsl
 
 import android.graphics.Canvas
 import android.graphics.Color
