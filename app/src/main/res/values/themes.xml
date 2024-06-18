@@ -12,5 +12,21 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- 自定义switchPreference样式 -->
+        <item name="switchPreferenceCompatStyle">@style/myPreferenceCompatStyle</item>
+        <item name="switchPreferenceStyle">@style/myPreferenceStyle</item>
+        <item name="preferenceCategoryStyle">@style/myPreferenceCategoryStyleStyle</item>
+    </style>
+
+    <style name="myPreferenceCategoryStyleStyle" parent="Preference.Category.Material">
+        <item name="android:layout">@layout/preference_category_material_dsl</item>
+    </style>
+
+    <style name="myPreferenceCompatStyle" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:layout">@layout/preference_material_dsl</item>
+    </style>
+
+    <style name="myPreferenceStyle" parent="Preference.SwitchPreference.Material">
+        <item name="android:layout">@layout/preference_material_dsl</item>
     </style>
 </resources>

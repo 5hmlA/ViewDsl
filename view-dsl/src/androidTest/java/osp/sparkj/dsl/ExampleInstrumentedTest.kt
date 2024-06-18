@@ -1,22 +1,55 @@
 package osp.sparkj.dsl
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import org.junit.Assert.*
-import org.junit.Test
-import org.junit.runner.RunWith
+@DslMarker
+@Target(AnnotationTarget.FUNCTION,AnnotationTarget.TYPE, AnnotationTarget.CLASS)
+annotation class HtmlDsl
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-@RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("osp.sparkj.wings", appContext.packageName)
+@HtmlDsl
+class Html {
+    private val elements = mutableListOf<Body>()
+
+    fun body(init:Body.() -> Unit) {
+        val body = Body().apply(init)
+        elements.add(body)
     }
+
+    override fun toString() = elements.joinToString(separator = "\n") { it.toString() }
+}
+
+@HtmlDsl
+class Body {
+    private val elements = mutableListOf<P>()
+
+    fun p(init: P.() -> Unit) {
+        val p = P().apply(init)
+        elements.add(p)
+    }
+
+    override fun toString() = elements.joinToString(separator = "\n") { it.toString() }
+}
+
+@HtmlDsl
+class P {
+    var text: String = ""
+
+    override fun toString() = "<p>$text</p>"
+}
+
+fun html(init: Html.() -> Unit): Html {
+    return Html().apply(init)
+}
+
+fun main() {
+    val document = html {
+        body {
+            p {
+                text = "Hello, world!"
+//                body {} // 这将被编译器限制
+            }
+
+            // 如果没有@DslMarker，这里可以意外地调用外层Html的方法
+//             body {} // 这将被编译器限制
+        }
+    }
+    println(document)
 }

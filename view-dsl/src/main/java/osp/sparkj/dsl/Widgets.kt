@@ -26,7 +26,7 @@ import android.widget.Space
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.Modifier
+
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.contains
 import androidx.core.view.isVisible
@@ -38,8 +38,9 @@ import com.google.android.material.imageview.ShapeableImageView
 
 
 //限制使用最近的receiver
+//对于有receiver的方法(A.()->Unit),限定作用域只在此方法内,方法内部的方法无法访问
 @DslMarker
-@Target(AnnotationTarget.TYPE)
+@Target(AnnotationTarget.FUNCTION,AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 annotation class ViewDslScope
 
 context(ViewGroup)

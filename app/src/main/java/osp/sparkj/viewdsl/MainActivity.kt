@@ -18,14 +18,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.graphics.toColorInt
 import osp.sparkj.cartoon.wings.todp
 import osp.sparkj.cartoon.wings.todpf
-import osp.sparkj.wings.*
+import osp.sparkj.dsl.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,12 +9,22 @@ import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.Modifier
+
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import androidx.core.view.WindowCompat
 import osp.sparkj.cartoon.wings.todp
 import osp.sparkj.cartoon.wings.todpf
-import osp.sparkj.wings.*
+import osp.sparkj.dsl.LayoutConstraint
+import osp.sparkj.dsl.Modifier
+import osp.sparkj.dsl.ViewCompose
+import osp.sparkj.dsl.background
+import osp.sparkj.dsl.framelayoutParams
+import osp.sparkj.dsl.icon
+import osp.sparkj.dsl.layoutParams
+import osp.sparkj.dsl.padding
+import osp.sparkj.dsl.text
+import osp.sparkj.dsl.vLayoutConstraint
+import osp.sparkj.dsl.*
 
 class FlipActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

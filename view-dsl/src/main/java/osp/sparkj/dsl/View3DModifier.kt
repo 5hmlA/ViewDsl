@@ -9,7 +9,7 @@ import android.graphics.PointF
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.Modifier
+
 import osp.sparkj.cartoon.wings.alpha
 import osp.sparkj.cartoon.wings.todpf
 import osp.sparkj.cartoon.wings.transForm

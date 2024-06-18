@@ -3,7 +3,7 @@ package osp.sparkj.dsl
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
-import androidx.compose.ui.Modifier
+
 
 inline fun <reified T> Any?.safeAs(): T? = this as? T
 
