@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.Outline
 import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -24,9 +25,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.contains
 import androidx.core.view.isVisible
@@ -40,8 +39,19 @@ import com.google.android.material.imageview.ShapeableImageView
 //限制使用最近的receiver
 //对于有receiver的方法(A.()->Unit),限定作用域只在此方法内,方法内部的方法无法访问
 @DslMarker
-@Target(AnnotationTarget.FUNCTION,AnnotationTarget.TYPE, AnnotationTarget.CLASS)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 annotation class ViewDslScope
+
+fun ViewGroup.addViewCheck(child: View, width: Int, height: Int) {
+    if (child.parent != null) {
+        return
+    }
+    if (child.checkId(id).layoutParams != null) {
+        addView(child, child.layoutParams)
+    } else {
+        addView(child, width, height)
+    }
+}
 
 context(ViewGroup)
 operator fun View.unaryMinus() {
@@ -69,169 +79,114 @@ fun ViewGroup.animateLayoutChange(transition: LayoutTransition = LayoutTransitio
     layoutTransition = transition
 }
 
+fun View.linearLayoutParams(
+    width: Int = LayoutParams.MATCH_PARENT, height: Int = LayoutParams.WRAP_CONTENT,
+    param: @ViewDslScope LinearLayout.LayoutParams.() -> Unit
+) {
+    layoutParams = LinearLayout.LayoutParams(width, height).apply(param)
+}
+
+inline fun View.frameLayoutParams(
+    width: Int = LayoutParams.MATCH_PARENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
+    block: @ViewDslScope FrameLayout.LayoutParams.() -> Unit = {}
+) {
+    layoutParams = FrameLayout.LayoutParams(width, height).apply(block)
+}
+
+fun ConstraintLayout.LayoutParams.matchHorizontal() {
+    width = 0
+    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+}
+
+fun ConstraintLayout.LayoutParams.matchVertical() {
+    height = 0
+    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+}
+
+inline fun View.constLayoutParams(
+    width: Int = LayoutParams.MATCH_PARENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
+    config: @ViewDslScope ConstraintLayout.LayoutParams.() -> Unit = {}
+) {
+    layoutParams = ConstraintLayout.LayoutParams(width, height).apply(config)
+}
+
 inline fun <reified T : ViewGroup> T.row(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.MATCH_PARENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     crossinline content: @ViewDslScope LinearLayout.() -> Unit
 ): LinearLayout {
     return (findViewById(id) ?: LinearLayout(context)).apply(content).also {
         it.orientation = LinearLayout.HORIZONTAL
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
 
 inline fun ViewGroup.column(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.MATCH_PARENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     crossinline content: @ViewDslScope LinearLayout.() -> Unit
 ): LinearLayout {
     return (findViewById(id) ?: LinearLayout(context)).apply(content).also {
         it.orientation = LinearLayout.VERTICAL
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
 
 inline fun <reified T : ViewGroup> T.linearlayout(
-    width: Number = LayoutParams.WRAP_CONTENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.WRAP_CONTENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     content: @ViewDslScope LinearLayout.() -> Unit
 ): LinearLayout {
     return (findViewById(id) ?: LinearLayout(context)).apply(content).also {
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
 
 inline fun ViewGroup.icon(
-    width: Number = LayoutParams.WRAP_CONTENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.WRAP_CONTENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     crossinline config: @ViewDslScope ShapeableImageView.() -> Unit
 ): ImageView {
     //setShapeAppearanceModel()
     //setStroke...()
     return (findViewById(id) ?: ShapeableImageView(context)).apply(config).also {
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
 
 inline fun ViewGroup.view(
-    width: Number = LayoutParams.WRAP_CONTENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.WRAP_CONTENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
-    supplyer: () -> View
+    supplyer: @ViewDslScope () -> View
 ): View {
     return (findViewById(id) ?: supplyer()).also {
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
-
-inline fun View.framelayoutParams(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
-    block: @ViewDslScope FrameLayout.LayoutParams.() -> Unit = {}
-) {
-    layoutParams = FrameLayout.LayoutParams(width.toInt(), height.toInt()).apply(block)
-}
-
-inline fun View.linelayoutParams(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
-    block: @ViewDslScope LinearLayout.LayoutParams.() -> Unit = {}
-) {
-    layoutParams = LinearLayout.LayoutParams(width.toInt(), height.toInt()).apply(block)
-}
-
-context(ConstraintLayout)
-inline fun View.layoutParams(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
-    all2parent: Boolean? = null,
-    block: @ViewDslScope ConstraintLayout.LayoutParams.() -> Unit = {}
-) {
-    layoutParams = ConstraintLayout.LayoutParams(width.toInt(), height.toInt()).apply {
-        if (all2parent == true) {
-            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-        }
-        block()
-    }
-}
-
-inline fun View.constLayoutParams(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
-    config: @ViewDslScope ConstraintLayout.LayoutParams.() -> Unit = {}
-) {
-    layoutParams = ConstraintLayout.LayoutParams(width.toInt(), height.toInt()).apply(config)
-}
-
-fun lineLayoutParams(
-    width: Number = LayoutParams.WRAP_CONTENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
-    weight: Float = 0F
-) = LinearLayout.LayoutParams(width.toInt(), height.toInt(), weight)
 
 inline fun ViewGroup.text(
-    width: Number = LayoutParams.WRAP_CONTENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.WRAP_CONTENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     crossinline config: @ViewDslScope TextView.() -> Unit
 ): TextView {
     return (findViewById(id) ?: TextView(context)).apply(config).also {
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
 
 inline fun ViewGroup.button(
-    width: Number = LayoutParams.WRAP_CONTENT,
-    height: Number = LayoutParams.WRAP_CONTENT,
+    width: Int = LayoutParams.WRAP_CONTENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     crossinline config: @ViewDslScope MaterialButton.() -> Unit
 ): Button {
@@ -243,20 +198,13 @@ inline fun ViewGroup.button(
     //insetTop = 0
     //insetBottom = 0
     return (findViewById(id) ?: MaterialButton(context)).apply(config).also {
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams != null) {
-            addView(it)
-        } else {
-            addView(it, width.toInt(), height.toInt())
-        }
+        addViewCheck(it, width, height)
     }
 }
 
 inline fun <reified T : ViewGroup> T.spacer(
-    width: Number = -2,
-    height: Number = -2,
+    width: Int = -2,
+    height: Int = -2,
     id: Int = NO_ID,
     color: Int = Color.TRANSPARENT,
     layoutParams: LayoutParams? = null
@@ -268,12 +216,39 @@ inline fun <reified T : ViewGroup> T.spacer(
         if (it.parent != null) {
             return@also
         }
-        addView(it.checkId(id), layoutParams ?: LayoutParams(width.toInt(), height.toInt()))
+        addView(it.checkId(id), layoutParams ?: LayoutParams(width, height))
     }
 }
 
 inline fun <reified T : View> T.background(config: @ViewDslScope GradientDrawable.() -> Unit) {
     background = GradientDrawable().apply(config)
+}
+
+fun StateListDrawable.active(config: @ViewDslScope GradientDrawable.() -> Unit) {
+    val gradientDrawable = GradientDrawable().apply(config)
+    addState(
+        intArrayOf(android.R.attr.state_pressed),
+        gradientDrawable
+    )
+    addState(
+        intArrayOf(android.R.attr.state_selected),
+        gradientDrawable
+    )
+    addState(
+        intArrayOf(android.R.attr.state_checked),
+        gradientDrawable
+    )
+}
+
+fun StateListDrawable.default(config: @ViewDslScope GradientDrawable.() -> Unit) {
+    addState(
+        intArrayOf(),
+        GradientDrawable().apply(config)
+    )
+}
+
+inline fun <reified T : View> T.backgroundSelector(config: @ViewDslScope StateListDrawable.() -> Unit) {
+    background = StateListDrawable().apply(config)
 }
 
 //    1.设置View的Z轴高度  android:elevation="10dp"   对应代码  setElevation();
@@ -358,36 +333,26 @@ inline fun <reified T : View> T.visibility(visible: Boolean): T {
 inline fun <reified T : View> T.isVisible(): Boolean = isVisible
 
 inline fun <reified T : ViewGroup> T.canvas(
-    width: Number,
-    height: Number,
+    width: Int,
+    height: Int,
     id: Int = NO_ID,
     crossinline drawScope: @ViewDslScope CanvasView.() -> Unit
 ): CanvasView {
     return (findViewById(id) ?: CanvasView(context)).apply(drawScope).also {
-        if (it.parent != null) {
-            return@also
-        }
-        addView(it.checkId(id), width.toInt(), height.toInt())
+        addViewCheck(it, width, height)
     }
-//    addView(CanvasView(context = context).apply(drawScope), width.toInt(), height.toInt())
+//    addView(CanvasView(context = context).apply(drawScope), width, height)
 }
 
 inline fun <reified T : ViewGroup> T.vLayoutConstraint(
-    width: Number = LayoutParams.MATCH_PARENT,
-    height: Number = LayoutParams.MATCH_PARENT,
+    width: Int = LayoutParams.MATCH_PARENT,
+    height: Int = LayoutParams.MATCH_PARENT,
     modifier: Modifier = Modifier,
     id: Int = NO_ID,
     viewScope: @ViewDslScope LayoutConstraint.() -> Unit
 ): ConstraintLayout {
     return (findViewById(id) ?: LayoutConstraint(context = context, modifier)).apply(viewScope).also {
-        if (it.parent != null) {
-            return@also
-        }
-        if (it.checkId(id).layoutParams == null) {
-            addView(it, width.toInt(), height.toInt())
-        } else {
-            addView(it)
-        }
+        addViewCheck(it, width, height)
     }
 }
 
@@ -506,7 +471,7 @@ class LayoutConstraint constructor(
     }
 
     @SuppressLint("WrongCall")
-    private inline fun applyMeasure(width: Int, height: Int, widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    private fun applyMeasure(width: Int, height: Int, widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (width == 0 && height == 0) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         } else if (width == 0) {
@@ -752,16 +717,4 @@ fun View.topLayerTip(more: ((TextView) -> Unit)? = null): MutableLiveData<String
         }
     }
     return source
-}
-
-
-fun ComponentActivity.setContent(
-    modifier: Modifier = Modifier,
-    content: @ViewDslScope LayoutConstraint.() -> Unit
-) {
-    val layoutConstraint = LayoutConstraint(this, modifier)
-    setContentView(layoutConstraint.apply {
-        setBackgroundColor(Color.RED)
-    })
-    layoutConstraint.apply(content)
 }

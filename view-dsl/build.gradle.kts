@@ -1,3 +1,5 @@
+import wing.publish5hmlA
+
 plugins {
     id("com.android.library")
     alias(wings.plugins.android)
@@ -5,14 +7,9 @@ plugins {
 
 
 group = "osp.sparkj.ui"
-version = "2024.06.06"
+version = "2024.07.09"
 
-project.ext {
-    set("GROUP_ID", "osp.sparkj.ui")
-    set("ARTIFACT_ID", "view-dsl")
-    set("VERSION", version.toString())
-}
-apply(from = "../publish-plugin.gradle")
+publish5hmlA("android view dsl")
 
 android {
     namespace = "osp.sparkj.dsl"

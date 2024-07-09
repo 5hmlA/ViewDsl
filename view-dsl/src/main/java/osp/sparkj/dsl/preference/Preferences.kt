@@ -2,16 +2,20 @@ package osp.sparkj.dsl.preference
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.LinearLayout
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
+import androidx.preference.PreferenceViewHolder
 import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
+import osp.sparkj.dsl.R
 import osp.sparkj.dsl.ViewDslScope
+import osp.sparkj.dsl.safeAs
 
 //https://developer.android.google.cn/develop/ui/views/components/settings?hl=zh-cn
 
@@ -104,7 +108,7 @@ fun PreferenceScreen.category(title: Any? = null, content: @ViewDslScope Prefere
 }
 
 
-fun PreferenceScreen.categoryScope(title: Any? = null, content: PreferenceCategory.() -> Unit) {
+fun PreferenceScreen.categoryScope(title: Any? = null, content: @ViewDslScope PreferenceCategory.() -> Unit) {
 //    val category = PreferenceCategory(context, null)
 //    addPreference(category)//必须先加进去否则会报错
 //    category.content()
@@ -115,7 +119,25 @@ fun PreferenceScreen.categoryScope(title: Any? = null, content: PreferenceCatego
  * PreferenceCategory和PreferenceScreen都可引用
  */
 fun PreferenceGroup.layout(layout: Int, content: @ViewDslScope (Preference.() -> Unit)? = null) {
-    addPreference(Preference(context, null).apply { layoutResource = layout })
+    addPreference(Preference(context, null).apply {
+        layoutResource = layout
+        content?.invoke(this)
+    })
+}
+
+private class LayoutPreference(context: Context) : Preference(context) {
+    var linearContent: LinearLayout.() -> Unit = {}
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        holder.itemView.safeAs<LinearLayout>()?.linearContent()
+    }
+}
+
+
+fun PreferenceGroup.layout(content: LinearLayout.() -> Unit) {
+    addPreference(LayoutPreference(context).apply {
+        layoutResource = R.layout.preference_layout_dsl
+        linearContent = content
+    })
 }
 
 

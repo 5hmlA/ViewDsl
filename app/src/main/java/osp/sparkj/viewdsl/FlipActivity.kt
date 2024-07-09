@@ -9,7 +9,6 @@ import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
-
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import androidx.core.view.WindowCompat
 import osp.sparkj.cartoon.wings.todp
@@ -18,13 +17,14 @@ import osp.sparkj.dsl.LayoutConstraint
 import osp.sparkj.dsl.Modifier
 import osp.sparkj.dsl.ViewCompose
 import osp.sparkj.dsl.background
-import osp.sparkj.dsl.framelayoutParams
+import osp.sparkj.dsl.constLayoutParams
+import osp.sparkj.dsl.frameLayoutParams
 import osp.sparkj.dsl.icon
-import osp.sparkj.dsl.layoutParams
+import osp.sparkj.dsl.matchHorizontal
+import osp.sparkj.dsl.matchVertical
 import osp.sparkj.dsl.padding
 import osp.sparkj.dsl.text
 import osp.sparkj.dsl.vLayoutConstraint
-import osp.sparkj.dsl.*
 
 class FlipActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,7 @@ class FlipView @JvmOverloads constructor(
                 icon(width = 0, height = 0) {
                     setImageResource(R.mipmap.img)
                     scaleType = ImageView.ScaleType.CENTER_CROP
-                    layoutParams {
+                    constLayoutParams {
                         width = 0
                         height = 0
                         topToTop = PARENT_ID
@@ -82,7 +82,7 @@ class FlipView @JvmOverloads constructor(
                     v.alpha = 1 - p * 2
                 }
         ) {
-            layoutParams {
+            constLayoutParams {
                 height = topOffset.toInt()
                 topToTop = PARENT_ID
                 startToStart = PARENT_ID
@@ -92,7 +92,7 @@ class FlipView @JvmOverloads constructor(
                 padding(top = 16.todp)
                 text = "发现新版本"
                 textSize = 30F
-                layoutParams {
+                constLayoutParams {
                     width = -2
                     height = 100.todp
                     topToTop = PARENT_ID
@@ -112,7 +112,7 @@ class FlipView @JvmOverloads constructor(
                 cornerRadius = 13.todpf
                 color = ColorStateList.valueOf(Color.BLUE)
             }
-            layoutParams {
+            constLayoutParams {
                 topToBottom = head.id
                 startToStart = PARENT_ID
                 endToEnd = PARENT_ID
@@ -130,13 +130,9 @@ class FlipView @JvmOverloads constructor(
             icon(width = 0, height = 0) {
                 setImageResource(R.mipmap.img)
                 scaleType = ImageView.ScaleType.CENTER_CROP
-                layoutParams {
-                    width = 0
-                    height = 0
-                    topToTop = PARENT_ID
-                    startToStart = PARENT_ID
-                    endToEnd = PARENT_ID
-                    bottomToBottom = PARENT_ID
+                constLayoutParams {
+                    matchHorizontal()
+                    matchVertical()
                 }
             }
         }
@@ -148,7 +144,7 @@ class Touch3D @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), ViewCompose {
 
     init {
-        framelayoutParams(-1, -1) {
+        frameLayoutParams(-1, -1) {
             gravity = Gravity.CENTER
         }
 
@@ -166,12 +162,12 @@ class Touch3D @JvmOverloads constructor(
                 setImageResource(R.mipmap.img)
                 scaleType = ImageView.ScaleType.CENTER_CROP
 
-                layoutParams(all2parent = true) {
-                    width = 0
-                    height = 0
+                constLayoutParams {
+                    matchHorizontal()
+                    matchVertical()
                 }
             }
-            framelayoutParams(200.todp, 200.todp) {
+            frameLayoutParams(200.todp, 200.todp) {
                 gravity = Gravity.CENTER
             }
         }
