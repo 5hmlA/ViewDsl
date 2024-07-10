@@ -203,8 +203,8 @@ inline fun ViewGroup.button(
 }
 
 inline fun <reified T : ViewGroup> T.spacer(
-    width: Int = -2,
-    height: Int = -2,
+    width: Int = LayoutParams.WRAP_CONTENT,
+    height: Int = LayoutParams.WRAP_CONTENT,
     id: Int = NO_ID,
     color: Int = Color.TRANSPARENT,
     layoutParams: LayoutParams? = null
@@ -362,12 +362,12 @@ class CanvasView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr), Locker by MapLocker() {
 
-    val size = RectF(0F, 0f, 0f, 0F)
+    private val size = RectF(0F, 0f, 0f, 0F)
     var drawIntoCanvas: (Canvas) -> Unit = {}
     var attachToWindow: () -> Unit = {}
     var detachedFromWindow: () -> Unit = {}
-    var dispatchTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
-    var onTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
+    private var dispatchTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
+    private var onTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
 
     init {
         keepView()
@@ -445,8 +445,8 @@ class LayoutConstraint constructor(
     var attachToWindow: () -> Unit = {}
     var detachedFromWindow: () -> Unit = {}
     var drawIntoCanvas: (Canvas) -> Unit = {}
-    var onInterceptTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
-    var onTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
+    private var onInterceptTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
+    private var onTouchEvent: ((MotionEvent, () -> Boolean) -> Boolean)? = null
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
