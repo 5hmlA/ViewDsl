@@ -307,14 +307,14 @@ inline fun <reified T : View> T.padding(horizontal: Number? = null, vertical: Nu
 }
 
 inline fun <reified T : View> T.padding(
-    left: Number? = null,
-    top: Number? = null,
-    right: Number? = null,
-    bottom: Number? = null
+    left: Number = paddingStart,
+    top: Number = paddingTop,
+    right: Number = paddingEnd,
+    bottom: Number = paddingBottom
 ) {
     updatePadding(
-        left?.toInt() ?: paddingStart, top?.toInt() ?: paddingTop,
-        right?.toInt() ?: paddingEnd, bottom?.toInt() ?: paddingBottom
+        left.toInt(), top.toInt(),
+        right.toInt(), bottom.toInt()
     )
 }
 

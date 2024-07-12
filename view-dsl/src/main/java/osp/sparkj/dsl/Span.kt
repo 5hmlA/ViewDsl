@@ -65,17 +65,17 @@ fun spannableString(text: CharSequence = "", build: SpannableStringBuilder.() ->
 fun SpannableStringBuilder.span(regex: String, vararg style: Any?) {
     regex.toRegex().findAll(this).forEach { result ->
         style.toList().filterNotNull().forEach {
-            setSpan(it, result.range.first, result.range.last, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(it, result.range.first, result.range.last + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 }
 
-fun SpannableStringBuilder.addSpan(text: String, vararg style: Any?) {
+private fun SpannableStringBuilder.addSpan(text: String, vararg style: Any?) {
     val start = length
     append(text)
     val end = length
     style.filterNotNull().forEach {
-        setSpan(it, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        setSpan(it, start, end + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 }
 
