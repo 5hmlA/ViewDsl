@@ -1,6 +1,6 @@
 package osp.sparkj.dsl
 
-class JMutableMap<K, V> : LinkedHashMap<K, V> {
+class MutableDSLMap<K, V> : LinkedHashMap<K, V> {
 
     //1-> 次构造函数通过 constructor 关键字定义
     //2-> Kotlin 规定所有次构造函数必须调用主构造函数 (主构造函数定义再类名的位置)
@@ -16,8 +16,8 @@ class JMutableMap<K, V> : LinkedHashMap<K, V> {
     }
 }
 
-public fun <K, V> jmutableMapOf(vararg pairs: Pair<K, V>): JMutableMap<K, V> =
-    if (pairs.isNotEmpty()) pairs.toMap(JMutableMap()) else JMutableMap()
+public fun <K, V> dslMapOf(vararg pairs: Pair<K, V>): MutableDSLMap<K, V> =
+    if (pairs.isNotEmpty()) pairs.toMap(MutableDSLMap()) else MutableDSLMap()
 
 
 private const val INT_MAX_POWER_OF_TWO: Int = 1 shl (Int.SIZE_BITS - 2)

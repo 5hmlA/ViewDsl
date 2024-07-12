@@ -94,7 +94,7 @@ interface ViewModifier {
         }
     }
 
-    class VExtraMapModifier(private val mapData: JMutableMap<String, Any>) : Modifier.Element {
+    class VExtraMapModifier(private val mapData: MutableDSLMap<String, Any>) : Modifier.Element {
         fun extra(): Map<String, Any> = mapData
     }
 }
