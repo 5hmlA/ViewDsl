@@ -1,4 +1,4 @@
-package osp.sparkj.dsl
+package osp.june.wings
 
 class MutableDSLMap<K, V> : LinkedHashMap<K, V> {
 

@@ -11,20 +11,20 @@ import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import androidx.core.view.WindowCompat
+import osp.june.dsl.LayoutConstraint
+import osp.june.dsl.Modifier
+import osp.june.dsl.ViewCompose
+import osp.june.dsl.background
+import osp.june.dsl.constLayoutParams
+import osp.june.dsl.frameLayoutParams
+import osp.june.dsl.icon
+import osp.june.dsl.matchHorizontal
+import osp.june.dsl.matchVertical
+import osp.june.dsl.padding
+import osp.june.dsl.text
+import osp.june.dsl.vLayoutConstraint
 import osp.sparkj.cartoon.wings.todp
 import osp.sparkj.cartoon.wings.todpf
-import osp.sparkj.dsl.LayoutConstraint
-import osp.sparkj.dsl.Modifier
-import osp.sparkj.dsl.ViewCompose
-import osp.sparkj.dsl.background
-import osp.sparkj.dsl.constLayoutParams
-import osp.sparkj.dsl.frameLayoutParams
-import osp.sparkj.dsl.icon
-import osp.sparkj.dsl.matchHorizontal
-import osp.sparkj.dsl.matchVertical
-import osp.sparkj.dsl.padding
-import osp.sparkj.dsl.text
-import osp.sparkj.dsl.vLayoutConstraint
 
 class FlipActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class FlipView @JvmOverloads constructor(
     private fun LayoutConstraint.flipCardWithView() {
 
         val head = vLayoutConstraint(
-            modifier = Modifier
+            modifier = osp.june.dsl.Modifier
                 .vSizeFactor(widthScale, 0)
                 .vFlipHeadView { v, p ->
                     v.alpha = 1 - p * 2
@@ -102,7 +102,7 @@ class FlipView @JvmOverloads constructor(
             }
         }
         vLayoutConstraint(
-            modifier = Modifier
+            modifier = osp.june.dsl.Modifier
                 .debug(Color.YELLOW)
                 .vSizeFactor(widthScale, .66)
                 .vFlipCardView(widthScale)
@@ -122,7 +122,7 @@ class FlipView @JvmOverloads constructor(
 
     private fun LayoutConstraint.flipCardWithDraw() {
         vLayoutConstraint(
-            modifier = Modifier
+            modifier = osp.june.dsl.Modifier
                 .vSize(-1, -1)
                 .vFlipCard(topOffset = topOffset)
         ) {

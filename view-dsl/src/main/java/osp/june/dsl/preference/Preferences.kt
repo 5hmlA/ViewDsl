@@ -1,4 +1,4 @@
-package osp.sparkj.dsl.preference
+package osp.june.dsl.preference
 
 import android.content.Context
 import android.util.AttributeSet
@@ -15,8 +15,8 @@ import androidx.preference.PreferenceViewHolder
 import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
+import osp.june.dsl.ViewDslScope
 import osp.sparkj.dsl.R
-import osp.sparkj.dsl.ViewDslScope
 
 //https://developer.android.google.cn/develop/ui/views/components/settings?hl=zh-cn
 

@@ -1,19 +1,15 @@
 package osp.sparkj.viewdsl
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceFragmentCompat
-import osp.sparkj.dsl.preference.category
-import osp.sparkj.dsl.preference.checkBox
-import osp.sparkj.dsl.preference.layout
-import osp.sparkj.dsl.preference.screen
-import osp.sparkj.dsl.preference.seekBar
-import osp.sparkj.dsl.preference.switch
-import osp.sparkj.dsl.preference.switchCompat
+import osp.june.dsl.preference.category
+import osp.june.dsl.preference.checkBox
+import osp.june.dsl.preference.screen
+import osp.june.dsl.preference.seekBar
+import osp.june.dsl.preference.switch
+import osp.june.dsl.preference.switchCompat
 
 class MyPreferenceFragmentCompat : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
