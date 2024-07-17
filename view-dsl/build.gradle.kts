@@ -1,16 +1,18 @@
+import wing.publish5hmlA
+
 plugins {
     id("com.android.library")
     alias(wings.plugins.android)
 }
 
 
-group = "osp.sparkj.ui"
-version = "2024.07.09"
+group = "io.github.5gene"
+version = "0.0.1"
 
-//publish5hmlA("android view dsl")
+publish5hmlA("android view dsl", "kotlin")
 
 android {
-    namespace = "osp.sparkj.dsl"
+    namespace = "osp.june.dsl"
 }
 
 dependencies {
