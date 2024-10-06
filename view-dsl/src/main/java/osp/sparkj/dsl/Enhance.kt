@@ -1,10 +1,9 @@
-package osp.june.dsl
+package osp.sparkj.dsl
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import osp.june.wings.MutableDSLMap
 
 internal data class RefValue<D>(var valu: D)
 
@@ -95,8 +94,8 @@ interface ViewCompose : View3DModifier {
         this.customize()
     })
 
-    fun Modifier.vExtra(mapData: MutableDSLMap<String, Any>.() -> Unit) = this.then(
-        ViewModifier.VExtraMapModifier(MutableDSLMap<String, Any>().apply(mapData))
+    fun Modifier.vExtra(mapData: JMutableMap<String, Any>.() -> Unit) = this.then(
+        ViewModifier.VExtraMapModifier(JMutableMap<String, Any>().apply(mapData))
     )
 
     fun Modifier.vDraw(

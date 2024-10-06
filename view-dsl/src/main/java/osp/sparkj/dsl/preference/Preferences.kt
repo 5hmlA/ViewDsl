@@ -1,22 +1,17 @@
-package osp.june.dsl.preference
+package osp.sparkj.dsl.preference
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
-import androidx.preference.PreferenceViewHolder
 import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
-import osp.june.dsl.ViewDslScope
-import osp.sparkj.dsl.R
+import osp.sparkj.dsl.ViewDslScope
 
 //https://developer.android.google.cn/develop/ui/views/components/settings?hl=zh-cn
 
@@ -108,44 +103,21 @@ fun PreferenceScreen.category(title: Any? = null, content: @ViewDslScope Prefere
     addPreference(key = "", title = title, preference = PreferenceCategory(context, null), content = content)
 }
 
+
+fun PreferenceScreen.categoryScope(title: Any? = null, content: PreferenceCategory.() -> Unit) {
+//    val category = PreferenceCategory(context, null)
+//    addPreference(category)//必须先加进去否则会报错
+//    category.content()
+    addPreference(key = "", title = title, preference = PreferenceCategory(context, null), content = content)
+}
+
 /**
  * PreferenceCategory和PreferenceScreen都可引用
  */
-fun <T> PreferenceGroup.layout(layout: Int, content: @ViewDslScope T.() -> Unit = { }) {
-    addPreference(LayoutPreference<T>(context).apply {
-        layoutResource = layout
-        this.content = content
-    })
+fun PreferenceGroup.layout(layout: Int, content: @ViewDslScope (Preference.() -> Unit)? = null) {
+    addPreference(Preference(context, null).apply { layoutResource = layout })
 }
 
-fun PreferenceGroup.layout(layout: Int, content: @ViewDslScope Preference.() -> Unit = { }) {
-    addPreference(Preference(context).apply {
-        layoutResource = layout
-        content()
-    })
-}
-
-private class LayoutPreference<T>(context: Context) : Preference(context) {
-    var content: T.() -> Unit = {}
-    override fun onBindViewHolder(holder: PreferenceViewHolder) {
-        (holder.itemView as T).content()
-    }
-}
-
-private class UrlPreference(context: Context) : Preference(context) {
-    override fun onBindViewHolder(holder: PreferenceViewHolder) {
-        super.onBindViewHolder(holder)
-        val imageView = holder.findViewById(android.R.id.icon) as ImageView
-        //显示地址图片
-    }
-}
-
-fun PreferenceGroup.linearLayout(content: LinearLayout.() -> Unit) {
-    addPreference(LayoutPreference<LinearLayout>(context).apply {
-        layoutResource = R.layout.preference_layout_dsl
-        this.content = content
-    })
-}
 
 //直接调用构造函数：几乎没有额外的开销，非常高效。
 //反射调用构造函数：有显著的开销，特别是当需要频繁调用时，性能差异会变得更加明显。
@@ -228,10 +200,10 @@ sealed class PrefBean() {
         val onCheckChange: ((SwitchPreference, Boolean) -> Unit)? = null
     ) : PrefBean()
 
-    class PreText(
-        val title: Any, val content: (Preference.() -> Unit)? = null,
-        val onClick: ((View) -> Unit)? = null
-    ) : PrefBean()
+//    class PreJump(
+//        val title: Any, val content: (JumpPreference.() -> Unit)? = null,
+//        val onClick: ((View) -> Unit)? = null
+//    ) : PrefBean()
 
     class PreLayout(
         val layout: Int,
@@ -246,16 +218,24 @@ class PrefScreen(val categories: List<PrefCategory>)
 fun PreferenceFragmentCompat.buildScreen(prefScreen: PrefScreen) {
     screen {
         prefScreen.categories.forEach { category ->
-            category {
+            categoryScope {
                 category.title?.let {
                     title = it
                 }
                 category.widgets.forEach { widget ->
                     when (widget) {
+//                        is PrefBean.PreJump -> jump {
+//                            if (widget.title is Int) setTitle(widget.title) else title = widget.title.toString()
+//                            widget.content?.invoke(this)
+//                            setOnPreciseClickListener { view, _, _ ->
+//                                widget.onClick?.invoke(view)
+//                            }
+//                        }
+
                         is PrefBean.PreLayout -> layout(widget.layout) {
                             widget.onClick?.let { onClick ->
                                 setOnPreferenceClickListener {
-                                    onClick(this@category)
+                                    onClick(this@categoryScope)
                                     true
                                 }
                             }
@@ -272,8 +252,6 @@ fun PreferenceFragmentCompat.buildScreen(prefScreen: PrefScreen) {
                             }
 
                         }
-
-                        is PrefBean.PreText -> TODO()
                     }
                 }
             }

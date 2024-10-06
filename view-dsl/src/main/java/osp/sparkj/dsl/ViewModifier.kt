@@ -1,9 +1,8 @@
-package osp.june.dsl
+package osp.sparkj.dsl
 
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
-import osp.june.wings.MutableDSLMap
 
 
 inline fun <reified T> Any?.safeAs(): T? = this as? T
@@ -95,7 +94,7 @@ interface ViewModifier {
         }
     }
 
-    class VExtraMapModifier(private val mapData: MutableDSLMap<String, Any>) : Modifier.Element {
+    class VExtraMapModifier(private val mapData: JMutableMap<String, Any>) : Modifier.Element {
         fun extra(): Map<String, Any> = mapData
     }
 }

@@ -1,28 +1,16 @@
-import wing.publish5hmlA
-
 plugins {
     id("com.android.library")
-    alias(wings.plugins.android)
+    alias(vcl.plugins.gene.android)
 }
 
-
 group = "io.github.5gene"
-version = "0.0.1"
-
-publish5hmlA("android view dsl", "kotlin")
+version = "0.1"
 
 android {
-    namespace = "osp.june.dsl"
+    namespace = "osp.sparkj.dsl"
 }
 
 dependencies {
-    implementation(wings.sparkj.cartoon)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.google.material)
-    testImplementation(libs.test.junit)
+    implementation(wings.gene.cartoon)
+    implementation(vcl.google.material)
 }

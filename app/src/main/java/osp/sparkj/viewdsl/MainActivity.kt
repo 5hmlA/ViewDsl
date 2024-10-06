@@ -21,18 +21,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.graphics.toColorInt
-import osp.june.dsl.Modifier
-import osp.june.dsl.ViewCompose
-import osp.june.dsl.background
-import osp.june.dsl.constLayoutParams
-import osp.june.dsl.icon
-import osp.june.dsl.padding
-import osp.june.dsl.safeAs
-import osp.june.dsl.spacer
-import osp.june.dsl.unaryPlus
-import osp.june.dsl.vLayoutConstraint
 import osp.sparkj.cartoon.wings.todp
 import osp.sparkj.cartoon.wings.todpf
+import osp.sparkj.dsl.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

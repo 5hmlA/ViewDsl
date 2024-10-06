@@ -1,4 +1,4 @@
-package osp.june.dsl
+package osp.sparkj.dsl
 
 import android.animation.ValueAnimator
 import android.graphics.PointF
@@ -60,11 +60,13 @@ val touchPressAnimator: ((Locker, MotionEvent, () -> Boolean) -> Boolean) = { lo
                 start()
             }
         }
+
         MotionEvent.ACTION_MOVE -> {
             val point = locker.retrieve(TOUCH_EVENT) { PointF(0F, 0F) }!!
             point.x = event.x.coerceIn(0F, width.toFloat())
             point.y = event.y.coerceIn(0F, height.toFloat())
         }
+
         MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
             val point = locker.retrieve(TOUCH_EVENT) { PointF(0F, 0F) }!!
             point.x = event.x.coerceIn(0F, width.toFloat())
@@ -87,6 +89,7 @@ val touchYAnimator: ((Locker, MotionEvent, () -> Boolean) -> Boolean) = { locker
                     last.x = event.x
                     locker.retrieve(TOUCH_EVENT_MOVE_PX) { RefValue(0F) }!!.valu = 0F
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val last = locker.retrieve(TOUCH_EVENT_LAST) { PointF(0F, 0F) }!!
                     val down = event.y - last.y > 0
@@ -119,6 +122,7 @@ val touchYAnimator: ((Locker, MotionEvent, () -> Boolean) -> Boolean) = { locker
                         setCurrentFraction(1 + fl)
                     }
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     val value = animatedValue as Float
                     if (value == 1F || value == 0F) {

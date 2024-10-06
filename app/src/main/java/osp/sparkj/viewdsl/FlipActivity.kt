@@ -11,20 +11,9 @@ import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import androidx.core.view.WindowCompat
-import osp.june.dsl.LayoutConstraint
-import osp.june.dsl.Modifier
-import osp.june.dsl.ViewCompose
-import osp.june.dsl.background
-import osp.june.dsl.constLayoutParams
-import osp.june.dsl.frameLayoutParams
-import osp.june.dsl.icon
-import osp.june.dsl.matchHorizontal
-import osp.june.dsl.matchVertical
-import osp.june.dsl.padding
-import osp.june.dsl.text
-import osp.june.dsl.vLayoutConstraint
 import osp.sparkj.cartoon.wings.todp
 import osp.sparkj.cartoon.wings.todpf
+import osp.sparkj.dsl.*
 
 class FlipActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +46,7 @@ class FlipView @JvmOverloads constructor(
                 icon(width = 0, height = 0) {
                     setImageResource(R.mipmap.img)
                     scaleType = ImageView.ScaleType.CENTER_CROP
-                    constLayoutParams {
+                    layoutParams {
                         width = 0
                         height = 0
                         topToTop = PARENT_ID
@@ -76,13 +65,13 @@ class FlipView @JvmOverloads constructor(
     private fun LayoutConstraint.flipCardWithView() {
 
         val head = vLayoutConstraint(
-            modifier = osp.june.dsl.Modifier
+            modifier = Modifier
                 .vSizeFactor(widthScale, 0)
                 .vFlipHeadView { v, p ->
                     v.alpha = 1 - p * 2
                 }
         ) {
-            constLayoutParams {
+            layoutParams {
                 height = topOffset.toInt()
                 topToTop = PARENT_ID
                 startToStart = PARENT_ID
@@ -92,7 +81,7 @@ class FlipView @JvmOverloads constructor(
                 padding(top = 16.todp)
                 text = "发现新版本"
                 textSize = 30F
-                constLayoutParams {
+                layoutParams {
                     width = -2
                     height = 100.todp
                     topToTop = PARENT_ID
@@ -102,7 +91,7 @@ class FlipView @JvmOverloads constructor(
             }
         }
         vLayoutConstraint(
-            modifier = osp.june.dsl.Modifier
+            modifier = Modifier
                 .debug(Color.YELLOW)
                 .vSizeFactor(widthScale, .66)
                 .vFlipCardView(widthScale)
@@ -112,7 +101,7 @@ class FlipView @JvmOverloads constructor(
                 cornerRadius = 13.todpf
                 color = ColorStateList.valueOf(Color.BLUE)
             }
-            constLayoutParams {
+            layoutParams {
                 topToBottom = head.id
                 startToStart = PARENT_ID
                 endToEnd = PARENT_ID
@@ -122,7 +111,7 @@ class FlipView @JvmOverloads constructor(
 
     private fun LayoutConstraint.flipCardWithDraw() {
         vLayoutConstraint(
-            modifier = osp.june.dsl.Modifier
+            modifier = Modifier
                 .vSize(-1, -1)
                 .vFlipCard(topOffset = topOffset)
         ) {
@@ -130,9 +119,13 @@ class FlipView @JvmOverloads constructor(
             icon(width = 0, height = 0) {
                 setImageResource(R.mipmap.img)
                 scaleType = ImageView.ScaleType.CENTER_CROP
-                constLayoutParams {
-                    matchHorizontal()
-                    matchVertical()
+                layoutParams {
+                    width = 0
+                    height = 0
+                    topToTop = PARENT_ID
+                    startToStart = PARENT_ID
+                    endToEnd = PARENT_ID
+                    bottomToBottom = PARENT_ID
                 }
             }
         }
@@ -144,7 +137,7 @@ class Touch3D @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), ViewCompose {
 
     init {
-        frameLayoutParams(-1, -1) {
+        framelayoutParams(-1, -1) {
             gravity = Gravity.CENTER
         }
 
@@ -162,12 +155,12 @@ class Touch3D @JvmOverloads constructor(
                 setImageResource(R.mipmap.img)
                 scaleType = ImageView.ScaleType.CENTER_CROP
 
-                constLayoutParams {
-                    matchHorizontal()
-                    matchVertical()
+                layoutParams(all2parent = true) {
+                    width = 0
+                    height = 0
                 }
             }
-            frameLayoutParams(200.todp, 200.todp) {
+            framelayoutParams(200.todp, 200.todp) {
                 gravity = Gravity.CENTER
             }
         }
